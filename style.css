@@ -1,22 +1,23 @@
 
-/* FORM PESANAN */
-#formPesanan {
-  background: white;
+/* PERBAIKAN FORM PESANAN */
+#formOrder {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  background: #ffffff;
   padding: 20px;
   border-radius: 14px;
-  border: 1px solid #e2e8f0;
-}
-
-#formPesanan h2 {
-  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 #formOrder label {
   display: block;
-  font-weight: bold;
-  font-size: 14px;
-  margin-top: 15px;
-  margin-bottom: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #334155;
+  margin-top: 8px;
 }
 
 #formOrder input,
@@ -24,10 +25,12 @@
 #formOrder textarea {
   display: block;
   width: 100%;
-  padding: 12px;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 10px 12px;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
-  background: white;
+  background: #ffffff;
   font-size: 15px;
   color: #1e293b;
 }
@@ -37,21 +40,13 @@
 }
 
 #formOrder button {
-  padding: 13px 18px;
-  margin-top: 18px;
-  margin-right: 8px;
+  width: 100%;
+  padding: 13px;
+  margin-top: 10px;
   border: none;
   border-radius: 8px;
   background: #172554;
   color: white;
+  font-size: 15px;
   font-weight: bold;
-  font-size: 14px;
-}
-
-#formOrder button[type="button"] {
-  background: #64748b;
-}
-
-#formPesanan {
-  margin-bottom: 30px;
 }
