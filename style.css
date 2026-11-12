@@ -1,74 +1,57 @@
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f6fa;
-  color: #1e293b;
-}
-
-header {
-  background: #172554;
-  color: white;
-  padding: 22px;
-}
-
-header h1 {
-  font-size: 22px;
-  margin-bottom: 6px;
-}
-
-header p {
-  font-size: 13px;
-  color: #cbd5e1;
-}
-
-.container {
+/* FORM PESANAN */
+#formPesanan {
+  background: white;
   padding: 20px;
-  max-width: 1000px;
-  margin: auto;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
 }
 
-.welcome {
+#formPesanan h2 {
   margin-bottom: 20px;
 }
 
-.menu-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+#formOrder label {
+  display: block;
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: 15px;
+  margin-bottom: 6px;
 }
 
-.menu-card {
+#formOrder input,
+#formOrder select,
+#formOrder textarea {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
   background: white;
-  padding: 20px 12px;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  text-align: center;
-  box-shadow: 0 2px 5px #00000008;
-}
-
-.menu-card h3 {
   font-size: 15px;
-  margin-top: 10px;
+  color: #1e293b;
 }
 
-.menu-card p {
-  font-size: 12px;
-  color: #64748b;
-  margin-top: 5px;
+#formOrder textarea {
+  min-height: 90px;
 }
 
-.menu-icon {
-  font-size: 28px;
+#formOrder button {
+  padding: 13px 18px;
+  margin-top: 18px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #172554;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
 }
 
-@media (min-width: 700px) {
-  .menu-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+#formOrder button[type="button"] {
+  background: #64748b;
+}
+
+#formPesanan {
+  margin-bottom: 30px;
 }
