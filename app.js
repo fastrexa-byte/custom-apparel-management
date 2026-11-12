@@ -62,3 +62,42 @@ async function ambilSemuaPesanan() {
 }
 
 console.log("Database Custom Apparel siap digunakan.");
+
+async function tampilkanRiwayat() {
+  const halaman = document.getElementById("halamanRiwayat");
+  const daftar = document.getElementById("daftarRiwayat");
+
+  halaman.style.display = "block";
+  daftar.innerHTML = "<p>Memuat data pesanan...</p>";
+
+  try {
+    const pesanan = await ambilSemuaPesanan();
+
+    if (pesanan.length === 0) {
+      daftar.innerHTML = "<p>Belum ada pesanan tersimpan.</p>";
+      return;
+    }
+
+    daftar.innerHTML = pesanan.map((item) => `
+      <div class="card">
+        <h3>Pesanan #${item.id}</h3>
+        <p><b>Nama:</b> ${item.nama || "-"}</p>
+        <p><b>WhatsApp:</b> ${item.wa || "-"}</p>
+        <p><b>Produk:</b> ${item.produk || "-"}</p>
+        <p><b>Jumlah:</b> ${item.jumlah || 0}</p>
+        <p><b>Target selesai:</b> ${item.target || "-"}</p>
+        <p><b>Total:</b> Rp ${Number(item.total || 0).toLocaleString("id-ID")}</p>
+        <p><b>DP:</b> Rp ${Number(item.dp || 0).toLocaleString("id-ID")}</p>
+      </div>
+    `).join("");
+
+  } catch (error) {
+    daftar.innerHTML = "<p>Gagal mengambil data pesanan.</p>";
+    console.error(error);
+  }
+}
+
+function kembaliDashboard() {
+  document.getElementById("halamanRiwayat").style.display = "none";
+}
+
