@@ -54,13 +54,29 @@
       <p>Catat DP dan pelunasan</p>
     </div>
 
-    <div class="menu-card">
+    <div class="menu-card" onclick="tampilkanRiwayat()">
       <div class="menu-icon">📚</div>
       <h3>Riwayat Pesanan</h3>
       <p>Lihat transaksi sebelumnya</p>
     </div>
   </section>
 
+  
+</section>
+
+<!-- AREA RIWAYAT PESANAN -->
+<section id="halamanRiwayat" style="display:none; margin-top:25px;">
+  <h2>Riwayat Pesanan</h2>
+  <p>Daftar seluruh pesanan yang telah tersimpan.</p>
+
+  <div id="daftarRiwayat"></div>
+
+  <button onclick="kembaliDashboard()">
+    Kembali ke Dashboard
+  </button>
+</section>
+
+<!-- FORM PESANAN BARU -->
   <section id="formPesanan" style="display:none; margin-top:25px;">
     <h2>Form Pesanan Baru</h2>
 
