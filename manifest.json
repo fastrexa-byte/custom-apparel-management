@@ -1,0 +1,12 @@
+
+{
+  "name": "Custom Apparel Management",
+  "short_name": "Custom Apparel",
+  "description": "Aplikasi manajemen pesanan dan produksi apparel custom",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f6fa",
+  "theme_color": "#172554",
+  "orientation": "portrait"
+}
