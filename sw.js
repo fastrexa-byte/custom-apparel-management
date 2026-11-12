@@ -1,9 +1,11 @@
 
-const CACHE_NAME = "custom-apparel-v4";
+const CACHE_NAME = "custom-apparel-v5";
+
 const FILES_TO_CACHE = [
   "./",
   "./index.html",
   "./style.css",
+  "./app.js",
   "./manifest.json"
 ];
 
@@ -34,9 +36,31 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
+  const url = new URL(event.request.url);
+
+  if (url.origin !== self.location.origin) return;
+
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request);
-    })
+    fetch(event.request)
+      .then((response) => {
+        if (response.ok) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, copy);
+          });
+        }
+
+        return response;
+      })
+      .catch(async () => {
+        const cached = await caches.match(event.request);
+
+        if (cached) return cached;
+
+        return new Response("Kamu sedang offline.", {
+          status: 503,
+          headers: { "Content-Type": "text/plain" }
+        });
+      })
   );
 });
