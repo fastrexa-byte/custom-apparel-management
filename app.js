@@ -239,7 +239,7 @@ async function mulaiRestoreDatabase() {
     return;
   }
 
-  if (!confirm("Gabungkan data dari file backup ke database ini?")) {
+  if (!confirm("Restore akan MENGGANTI seluruh data pesanan saat ini dengan isi file backup. Lanjutkan?")) {
     return;
   }
 
