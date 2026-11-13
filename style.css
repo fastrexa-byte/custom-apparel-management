@@ -355,3 +355,15 @@ input[type="file"] {
   background: #ffffff;
   font-family: inherit;
 }
+/* PERBAIKAN GARIS BACKUP & RESTORE */
+
+#backupDatabase hr {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+#backupDatabase button {
+  margin-bottom: 8px;
+}
