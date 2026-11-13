@@ -136,3 +136,74 @@ async function backupDatabase() {
     alert("Backup gagal dibuat.");
   }
 }
+
+async function restoreDatabase(file) {
+  try {
+    const isiFile = await file.text();
+    const backup = JSON.parse(isiFile);
+
+    if (
+      !backup.dataPesanan ||
+      !Array.isArray(backup.dataPesanan)
+    ) {
+      alert("File backup tidak valid.");
+      return;
+    }
+
+    const pesananLama = await ambilSemuaPesanan();
+    const idTerpakai = new Set(
+      pesananLama.map(item => item.id)
+    );
+
+    const db = await bukaDatabase();
+
+    await new Promise((resolve, reject) => {
+      const transaksi = db.transaction(STORE_NAME, "readwrite");
+      const store = transaksi.objectStore(STORE_NAME);
+
+      backup.dataPesanan.forEach(item => {
+        const data = { ...item };
+
+        // Jika ID sudah digunakan, buat ID baru.
+        if (data.id == null || idTerpakai.has(data.id)) {
+          delete data.id;
+        } else {
+          idTerpakai.add(data.id);
+        }
+
+        store.add(data);
+      });
+
+      transaksi.oncomplete = resolve;
+      transaksi.onerror = () => reject(transaksi.error);
+      transaksi.onabort = () => reject(transaksi.error);
+    });
+
+    db.close();
+
+    alert(
+      "Restore berhasil! " +
+      backup.dataPesanan.length +
+      " data pesanan berhasil diproses."
+    );
+
+  } catch (error) {
+    console.error(error);
+    alert("Restore gagal. Pastikan file backup benar.");
+  }
+}
+
+async function mulaiRestoreDatabase() {
+  const input = document.getElementById("fileBackup");
+
+  if (!input.files.length) {
+    alert("Pilih file backup terlebih dahulu.");
+    return;
+  }
+
+  if (!confirm("Gabungkan data dari file backup ke database ini?")) {
+    return;
+  }
+
+  await restoreDatabase(input.files[0]);
+}
