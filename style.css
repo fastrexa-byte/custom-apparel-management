@@ -316,3 +316,42 @@ input[type="file"] {
   background: #ffffff;
   font-size: 13px;
 }
+
+/* APPLE STYLE - BACKUP & RESTORE */
+
+#backupDatabase button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 12px 26px;
+  border: none;
+  border-radius: 999px;
+  background: #172554;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.12);
+  transition: all 0.2s ease;
+}
+
+#backupDatabase button:hover {
+  background: #263d78;
+  transform: translateY(-1px);
+}
+
+#backupDatabase button:active {
+  transform: scale(0.97);
+}
+
+#backupDatabase input[type="file"] {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  border: 1px solid #dbe2ea;
+  border-radius: 14px;
+  background: #ffffff;
+  font-family: inherit;
+}
