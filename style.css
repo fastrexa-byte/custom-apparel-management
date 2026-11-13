@@ -380,3 +380,9 @@ input[type="file"] {
   border-top: 1px solid #e2e8f0;
   margin: 20px 0 !important;
 }
+/* POSISI TOMBOL BACKUP DATABASE */
+
+#backupDatabase > button:first-of-type {
+  margin-top: 10px !important;
+  margin-bottom: 20px !important;
+}
