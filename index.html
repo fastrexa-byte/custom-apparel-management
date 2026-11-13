@@ -103,66 +103,118 @@
     Kembali ke Dashboard
   </button>
 </section>
-
+  
 <!-- FORM PESANAN BARU -->
-  <section id="formPesanan" style="display:none; margin-top:25px;">
-    <h2>Form Pesanan Baru</h2>
+<section id="formPesanan" style="display:none; margin-top:25px;">
+  <h2>Form Pesanan Baru</h2>
 
-    <form id="formOrder">
-      <label>Nama Pelanggan</label>
-      <input id="nama" required placeholder="Nama pelanggan">
+  <form id="formOrder">
 
-      <label>Nomor WhatsApp</label>
-      <input id="wa" placeholder="08xxxxxxxxxx">
+    <h3>1. Data Pelanggan</h3>
 
-      <label>Nama Produk</label>
-      <select id="produk">
-        <option>Jersey Custom</option>
-        <option>Kaos Custom</option>
-        <option>Jersey Polo</option>
-        <option>Kaos Polo</option>
-      </select>
+    <label>Tanggal Pesanan</label>
+    <input id="tanggalPesanan" type="date" required>
 
-      <label>Bahan</label>
-      <select id="bahan">
-        <option>Dryfit</option>
-        <option>Cotton Combed</option>
-        <option>Polyester</option>
-        <option>Lainnya</option>
-      </select>
+    <label>Nama Pelanggan</label>
+    <input id="nama" required placeholder="Nama pelanggan">
 
-      <label>Lengan</label>
-      <select id="lengan">
-        <option>Pendek</option>
-        <option>Panjang</option>
-      </select>
+    <label>Nomor WhatsApp</label>
+    <input id="wa" type="tel" placeholder="08xxxxxxxxxx">
 
-      <label>Jenis Kerah</label>
-      <select id="kerah">
-        <option>O-Neck</option>
-        <option>V-Neck</option>
-        <option>Polo</option>
-      </select>
+    <label>Target Selesai</label>
+    <input id="target" type="date">
 
-      <label>Jumlah Pesanan</label>
-      <input id="jumlah" type="number" min="1" required placeholder="Contoh: 25">
+    <h3>2. Spesifikasi Produk</h3>
 
-      <label>Harga per Pcs (Rp)</label>
-      <input id="harga" type="number" min="0" required placeholder="Contoh: 85000">
+    <label>Nama Produk</label>
+    <select id="produk">
+      <option>Jersey Custom</option>
+      <option>Kaos Custom</option>
+      <option>Jersey Polo</option>
+      <option>Kaos Polo</option>
+    </select>
 
-      <label>Uang Muka / DP (Rp)</label>
-      <input id="dp" type="number" min="0" value="0">
+    <label>Jenis Pesanan</label>
+    <select id="jenisPesanan">
+      <option value="Satuan">Pesanan Satuan</option>
+      <option value="Kelompok">Pesanan Kelompok</option>
+    </select>
 
-      <label>Target Selesai</label>
-      <input id="target" type="date">
+    <label>Bahan</label>
+    <select id="bahan">
+      <option>Dryfit</option>
+      <option>Dryfit Milano</option>
+      <option>Dryfit Benzema</option>
+      <option>Cotton Combed 20s</option>
+      <option>Cotton Combed 24s</option>
+      <option>Cotton Combed 30s</option>
+      <option>Polyester</option>
+      <option>Lainnya</option>
+    </select>
 
-      <label>Catatan</label>
-      <textarea id="catatan" placeholder="Catatan tambahan"></textarea>
+    <label>Lengan</label>
+    <select id="lengan">
+      <option>Pendek</option>
+      <option>Panjang</option>
+    </select>
 
-      <button type="submit">Simpan Pesanan</button>
-      <button type="button" onclick="sembunyikanForm()">Batal</button>
-    </form>
-  </section>
+    <label>Jenis Kerah</label>
+    <select id="kerah">
+      <option>O-Neck</option>
+      <option>V-Neck</option>
+      <option>Polo</option>
+      <option>Rib</option>
+    </select>
+
+    <label>Warna Produk</label>
+    <input id="warna" placeholder="Contoh: Navy, Putih, Hitam">
+
+    <label>Teknik Produksi</label>
+    <select id="teknik">
+      <option>Sublimasi</option>
+      <option>Sablon</option>
+      <option>Bordir</option>
+      <option>Polyflex</option>
+      <option>Lainnya</option>
+    </select>
+
+    <label>Ukuran</label>
+    <select id="ukuran">
+      <option>XS</option>
+      <option>S</option>
+      <option selected>M</option>
+      <option>L</option>
+      <option>XL</option>
+      <option>XXL</option>
+      <option>XXXL</option>
+      <option>Jumbo</option>
+    </select>
+
+    <h3>3. Harga dan Pembayaran</h3>
+
+    <label>Jumlah Pesanan</label>
+    <input id="jumlah" type="number" min="1" required placeholder="Contoh: 25">
+
+    <label>Harga per Pcs (Rp)</label>
+    <input id="harga" type="number" min="0" required placeholder="Contoh: 85000">
+
+    <label>Diskon (Rp)</label>
+    <input id="diskon" type="number" min="0" value="0">
+
+    <label>Uang Muka / DP (Rp)</label>
+    <input id="dp" type="number" min="0" value="0">
+
+    <h3>4. Catatan Tambahan</h3>
+
+    <label>Catatan</label>
+    <textarea id="catatan" placeholder="Catatan tambahan atau permintaan khusus pelanggan"></textarea>
+
+    <button type="submit">Simpan Pesanan</button>
+    <button type="button" onclick="sembunyikanForm()">Batal</button>
+
+  </form>
+</section>
+
 
   <p id="pesan" style="margin-top:15px;"></p>
 
