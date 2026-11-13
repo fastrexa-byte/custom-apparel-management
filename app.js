@@ -101,3 +101,38 @@ function kembaliDashboard() {
   document.getElementById("halamanRiwayat").style.display = "none";
 }
 
+
+async function backupDatabase() {
+  try {
+    const pesanan = await ambilSemuaPesanan();
+
+    const backup = {
+      aplikasi: "Custom Apparel Management",
+      versi: 1,
+      tanggalBackup: new Date().toISOString(),
+      dataPesanan: pesanan
+    };
+
+    const file = new Blob(
+      [JSON.stringify(backup, null, 2)],
+      { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(file);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = `backup-pesanan-${new Date().toISOString().slice(0, 10)}.json`;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    URL.revokeObjectURL(url);
+
+    alert("Backup database berhasil dibuat!");
+  } catch (error) {
+    console.error(error);
+    alert("Backup gagal dibuat.");
+  }
+}
