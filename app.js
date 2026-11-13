@@ -102,6 +102,7 @@ function kembaliDashboard() {
 }
 
 
+
 async function backupDatabase() {
   try {
     const pesanan = await ambilSemuaPesanan();
@@ -128,14 +129,57 @@ async function backupDatabase() {
     link.click();
     link.remove();
 
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+    // Simpan informasi backup terakhir
+    const informasi = {
+      tanggal: new Date().toISOString(),
+      jumlah: pesanan.length
+    };
+
+    localStorage.setItem(
+      "informasiBackup",
+      JSON.stringify(informasi)
+    );
+
+    tampilkanInfoBackup();
 
     alert("Backup database berhasil dibuat!");
+
   } catch (error) {
     console.error(error);
     alert("Backup gagal dibuat.");
   }
 }
+
+function tampilkanInfoBackup() {
+  const area = document.getElementById("infoBackup");
+
+  if (!area) return;
+
+  const data = localStorage.getItem("informasiBackup");
+
+  if (!data) {
+    area.innerHTML = `
+      <b>Informasi Backup Terakhir</b>
+      <p>Belum ada backup yang dilakukan.</p>
+    `;
+    return;
+  }
+
+  const informasi = JSON.parse(data);
+
+  const tanggal = new Date(informasi.tanggal);
+
+  area.innerHTML = `
+    <b>Informasi Backup Terakhir</b>
+    <p>Tanggal: ${tanggal.toLocaleString("id-ID")}</p>
+    <p>Jumlah pesanan: ${informasi.jumlah} pesanan</p>
+  `;
+}
+
+document.addEventListener("DOMContentLoaded", tampilkanInfoBackup);
+
 
 async function restoreDatabase(file) {
   try {
