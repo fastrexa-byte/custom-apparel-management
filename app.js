@@ -180,8 +180,9 @@ function tampilkanInfoBackup() {
 
 document.addEventListener("DOMContentLoaded", tampilkanInfoBackup);
 
-
 async function restoreDatabase(file) {
+  let db;
+
   try {
     const isiFile = await file.text();
     const backup = JSON.parse(isiFile);
@@ -195,11 +196,12 @@ async function restoreDatabase(file) {
     }
 
     const pesananLama = await ambilSemuaPesanan();
+
     const idTerpakai = new Set(
       pesananLama.map(item => item.id)
     );
 
-    const db = await bukaDatabase();
+    db = await bukaDatabase();
 
     await new Promise((resolve, reject) => {
       const transaksi = db.transaction(STORE_NAME, "readwrite");
@@ -208,7 +210,6 @@ async function restoreDatabase(file) {
       backup.dataPesanan.forEach(item => {
         const data = { ...item };
 
-        // Jika ID sudah digunakan, buat ID baru.
         if (data.id == null || idTerpakai.has(data.id)) {
           delete data.id;
         } else {
@@ -223,8 +224,6 @@ async function restoreDatabase(file) {
       transaksi.onabort = () => reject(transaksi.error);
     });
 
-    db.close();
-
     alert(
       "Restore berhasil! " +
       backup.dataPesanan.length +
@@ -234,6 +233,8 @@ async function restoreDatabase(file) {
   } catch (error) {
     console.error(error);
     alert("Restore gagal. Pastikan file backup benar.");
+  } finally {
+    if (db) db.close();
   }
 }
 
