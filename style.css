@@ -367,3 +367,16 @@ input[type="file"] {
 #backupDatabase button {
   margin-bottom: 8px;
 }
+/* ATUR JARAK TOMBOL BACKUP DENGAN GARIS */
+
+#backupDatabase button {
+  margin-bottom: 20px !important;
+}
+
+#backupDatabase hr {
+  display: block;
+  width: 100%;
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 20px 0 !important;
+}
