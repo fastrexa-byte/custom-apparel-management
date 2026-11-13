@@ -386,3 +386,18 @@ input[type="file"] {
   margin-top: 10px !important;
   margin-bottom: 20px !important;
 }
+/* POSISI TOMBOL BACKUP DI TENGAH */
+
+#backupDatabase > p {
+  margin-bottom: 0 !important;
+}
+
+#backupDatabase > button:first-of-type {
+  display: flex;
+  width: fit-content;
+  margin: 12px 0 !important;
+}
+
+#backupDatabase > hr {
+  margin: 0 !important;
+}
