@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#172554">
+<title>Custom Apparel Management</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="style.css?v=16">
+</head>
+<body>
+<header class="topbar"><div><div class="eyebrow">ORDER MANAGEMENT SYSTEM</div><h1>Custom Apparel</h1><p>Kelola pesanan, desain, produksi, dan pembayaran.</p></div><span class="offline-pill" id="connectionState">● Siap digunakan</span></header>
+<main class="container">
+<section id="dashboardView" class="view active">
+ <div class="welcome"><div><span class="eyebrow">WORKSPACE</span><h2>Dashboard</h2><p>Ringkasan operasional usaha apparel custom.</p></div><button class="primary" onclick="showView('orderView')">＋ Pesanan Baru</button></div>
+ <div class="stats"><article class="stat"><span>Total Pesanan</span><strong id="statTotal">0</strong></article><article class="stat"><span>Dalam Produksi</span><strong id="statProduksi">0</strong></article><article class="stat"><span>Pesanan Selesai</span><strong id="statSelesai">0</strong></article><article class="stat"><span>Sisa Pembayaran</span><strong id="statSisa">Rp 0</strong></article><article class="stat"><span>Total Sudah Diterima</span><strong id="statDiterima">Rp 0</strong></article></div>
+ <div class="section-head"><div><h3>Menu Utama</h3><p>Akses fitur pengelolaan pesanan.</p></div></div>
+ <div class="menu-grid">
+  <button class="menu-card" onclick="showView('orderView')"><span class="menu-emoji">📋</span><b>Pesanan Baru</b><small>Buat pesanan pelanggan</small></button>
+  <button class="menu-card" onclick="showView('ordersView')"><span class="menu-emoji">📚</span><b>Riwayat Pesanan</b><small>Cari dan kelola transaksi</small></button>
+  <button class="menu-card" onclick="showView('customersView')"><span class="menu-emoji">👥</span><b>Kelola Pelanggan</b><small>Data pelanggan dan riwayat transaksi</small></button>
+  <button class="menu-card" onclick="showView('productionView')"><span class="menu-emoji">🏭</span><b>Produksi</b><small>Pantau tahapan pengerjaan</small></button>
+  <button class="menu-card" onclick="showView('financeView')"><span class="menu-emoji">💰</span><b>Pembayaran</b><small>DP, cicilan, dan pelunasan</small></button>
+  <button class="menu-card" onclick="showView('backupView')"><span class="menu-emoji">🗄️</span><b>Backup & Restore</b><small>Amankan data pesanan</small></button>
+  <button class="menu-card" onclick="showView('settingsView')"><span class="menu-emoji">⚙️</span><b>Pengaturan Toko</b><small>Identitas usaha</small></button>
+ </div>
+ <div class="section-head"><div><h3>Pesanan Terbaru</h3><p>Transaksi yang terakhir dimasukkan.</p></div><button class="subtle" onclick="showView('ordersView')">Lihat semua →</button></div><div id="recentOrders" class="order-list"></div>
+</section>
+<section id="orderView" class="view">
+ <div class="page-head"><button class="back" onclick="showView('dashboardView')">← Dashboard</button><span class="eyebrow">ORDER ENTRY</span><h2 id="orderFormTitle">Pesanan Baru</h2><p>Isi spesifikasi pesanan pelanggan dengan lengkap.</p></div>
+ <form id="orderForm" class="panel">
+  <input type="hidden" id="editId">
+  <div class="form-section"><h3>01 · Data Pelanggan</h3><div class="form-grid">
+   <label>Nama pelanggan *<input id="nama" required list="customerSuggestions" placeholder="Cari atau ketik nama pelanggan" autocomplete="off"><datalist id="customerSuggestions"></datalist></label><label>Nomor WhatsApp<input id="wa" type="tel" placeholder="08xxxxxxxxxx"></label>
+   <label class="full">Alamat pelanggan<textarea id="alamatPelanggan" rows="2" placeholder="Alamat lengkap pelanggan"></textarea></label>
+   <label>Tanggal pesanan<input id="tanggalPesanan" type="date"></label><label>Target selesai<input id="target" type="date"></label>
+  </div></div>
+  <div class="form-section"><h3>02 · Spesifikasi Produk</h3><div class="form-grid">
+   <label>Nama produk<select id="produk"><option>Jersey Custom</option><option>Kaos Custom</option><option>Jersey Polo</option><option>Kaos Polo</option><option>Hoodie Custom</option><option>Lainnya</option></select></label>
+   <label>Jenis pesanan<select id="jenisPesanan"><option value="Satuan">Satuan</option><option value="Grup">Grup / Tim / Komunitas</option></select></label>
+   <label>Paket produk<select id="paketUmum"><option>Atasan saja</option><option>Atasan + celana</option></select></label>
+   <label>Bahan<select id="bahan"><option>Dryfit</option><option>Dryfit Milano</option><option>Dryfit Benzema</option><option>Cotton Combed 20s</option><option>Cotton Combed 24s</option><option>Cotton Combed 30s</option><option>Polyester</option><option>Lainnya</option></select></label>
+   <label>Lengan<select id="lengan"><option>Pendek</option><option>Panjang</option><option>Tanpa lengan</option></select></label>
+   <label>Jenis kerah<select id="kerah"><option>O-Neck</option><option>V-Neck</option><option>Polo</option><option>Rib</option><option>Tanpa kerah</option></select></label>
+   <label>Teknik produksi<select id="teknik"><option>Sublimasi</option><option>Screen Printing / Sablon</option><option>Embroidery / Bordir</option><option>DTF</option><option>Polyflex</option><option>Lainnya</option></select></label>
+   <label>Warna<input id="warna" placeholder="Contoh: Navy kombinasi putih"></label>
+  </div></div>
+  <div class="form-section"><div class="section-head"><div><h3>03 · Rincian Peserta / Ukuran</h3><p>Semua peserta otomatis mengikuti spesifikasi umum. Gunakan Custom hanya jika ada peserta dengan kebutuhan berbeda.</p></div><button type="button" class="subtle" onclick="addParticipant()">＋ Tambah peserta</button></div><div class="table-wrap"><table class="participant-table"><thead><tr><th>Nama</th><th>No.</th><th>Ukuran</th><th>Jumlah</th><th>Harga satuan</th><th>Penyesuaian</th><th>Catatan peserta</th><th></th></tr></thead><tbody id="participantRows"></tbody></table></div><p class="hint">Klik Custom untuk mengubah spesifikasi peserta tertentu. Harga dihitung berdasarkan spesifikasi umum atau spesifikasi custom peserta.</p><div class="form-grid compact"><label>Jumlah pesanan *<input id="jumlah" type="number" min="1" value="1" required readonly></label><label>Harga rata-rata per pcs<input id="harga" type="number" min="0" value="0" readonly></label><label>Diskon (Rp)<input id="diskon" type="number" min="0" value="0"></label><label>DP awal (Rp)<input id="dp" type="number" min="0" value="0"></label></div><div class="totals"><div><span>Subtotal</span><b id="subtotalPreview">Rp 0</b></div><div><span>Total setelah diskon</span><b id="totalPreview">Rp 0</b></div><div><span>Sisa pembayaran</span><b id="sisaPreview">Rp 0</b></div></div></div>
+  <div class="form-section"><h3>04 · File Desain</h3><label>Unggah desain (JPG, PNG, PDF)<input id="designFiles" type="file" accept="image/jpeg,image/png,application/pdf" multiple></label><p class="hint">File disimpan di database lokal perangkat ini. Hindari menghapus data browser sebelum membuat backup.</p></div>
+  <div class="form-section"><h3>05 · Catatan & Status</h3><div class="form-grid"><label>Status produksi<select id="statusProduksi"><option>Siap Produksi</option><option>Dalam Produksi</option><option>Produksi Selesai</option><option>Siap Diambil / Dikirim</option><option>Selesai</option></select></label><label>Catatan<textarea id="catatan" rows="3" placeholder="Permintaan khusus pelanggan"></textarea></label></div></div>
+  <div class="form-actions"><button type="button" class="secondary" onclick="showView('dashboardView')">Batal</button><button class="primary" type="submit">Simpan Pesanan</button></div>
+ </form>
+</section>
+<section id="ordersView" class="view"><div class="page-head"><button class="back" onclick="showView('dashboardView')">← Dashboard</button><span class="eyebrow">ORDER ARCHIVE</span><h2>Riwayat Pesanan</h2><p>Semua pesanan yang tersimpan di perangkat ini.</p></div><div class="toolbar"><input id="searchOrders" placeholder="Cari nama, WhatsApp, atau nomor pesanan..."><select id="filterStatus"><option value="">Semua status</option><option>Siap Produksi</option><option>Dalam Produksi</option><option>Produksi Selesai</option><option>Siap Diambil / Dikirim</option><option>Selesai</option></select></div><div id="allOrders" class="order-list"></div></section>
+<section id="productionView" class="view"><div class="page-head"><button class="back" onclick="showView('dashboardView')">← Dashboard</button><span class="eyebrow">WORKFLOW</span><h2>Produksi</h2><p>Perbarui status pengerjaan pesanan.</p></div><div id="productionList" class="order-list"></div></section>
+<section id="financeView" class="view"><div class="page-head"><button class="back" onclick="showView('dashboardView')">← Dashboard</button><span class="eyebrow">PAYMENT</span><h2>Pembayaran</h2><p>Pantau tagihan dan catat pembayaran pelanggan.</p></div><div id="financeList" class="order-list"></div></section>
+<section id="backupView" class="view"><div class="page-head"><button class="back" onclick="showView('dashboardView')">← Dashboard</button><span class="eyebrow">DATA SECURITY</span><h2>Backup & Restore</h2><p>Cadangkan data agar dapat dipindahkan ke perangkat lain.</p></div><div class="panel"><h3>Backup Database</h3><p class="hint">Unduh semua pesanan, rincian peserta, pembayaran, dan file desain.</p><button class="primary" onclick="backupDatabase()">Unduh Backup JSON</button><div id="backupInfo" class="backup-info">Belum ada backup dilakukan dari perangkat ini.</div><hr><h3>Restore Database</h3><p class="hint">Restore akan mengganti seluruh data di perangkat ini dengan isi file backup.</p><label>Pilih file backup JSON<input type="file" id="restoreFile" accept=".json,application/json"></label><button class="danger" onclick="restoreDatabase()">Restore Database</button></div></section>
+<section id="customersView" class="view">
+ <div class="page-head"><button class="back" onclick="showView('dashboardView')">← Dashboard</button><span class="eyebrow">CUSTOMER DATABASE</span><h2>Kelola Pelanggan</h2><p>Database pelanggan, alamat, dan rekap seluruh pesanan.</p></div>
+ <div class="panel">
+  <h3 id="customerFormTitle">Tambah / Perbarui Pelanggan</h3><input type="hidden" id="customerEditId">
+  <div class="form-grid">
+   <label>Nama pelanggan *<input id="customerName" placeholder="Nama pelanggan"></label>
+   <label>Nomor WhatsApp<input id="customerWa" placeholder="08xxxxxxxxxx"></label>
+   <label class="full">Alamat pelanggan<textarea id="customerAddress" rows="2" placeholder="Alamat lengkap pelanggan"></textarea></label>
+  </div>
+  <div class="form-actions"><button class="primary" type="button" onclick="saveCustomerFromManager()">Simpan Pelanggan</button><button class="secondary" type="button" onclick="resetCustomerForm()">Batal</button></div>
+ </div>
+ <div class="section-head"><div><h3>Daftar Pelanggan</h3><p>Cari nama atau nomor WhatsApp untuk melihat rekap pesanan.</p></div></div>
+ <div class="panel"><label>Cari pelanggan<input id="searchCustomers" placeholder="Ketik nama atau nomor WhatsApp..."></label><div id="customerList" class="order-list"></div></div>
+ <div id="customerDetail"></div>
+</section>
+<section id="settingsView" class="view"><div class="page-head"><button class="back" onclick="showView('dashboardView')">← Dashboard</button><span class="eyebrow">SHOP PROFILE</span><h2>Pengaturan Toko</h2><p>Identitas usaha yang digunakan pada dokumen.</p></div><form id="settingsForm" class="panel"><label>Nama toko<input id="shopName" placeholder="Nama usaha"></label><label>Alamat<textarea id="shopAddress" rows="2"></textarea></label><label>WhatsApp toko<input id="shopWa"></label><label>Instagram<input id="shopInstagram"></label><label>Slogan<input id="shopTagline"></label><label>Logo toko (JPG / PNG)<input id="shopLogo" type="file" accept="image/jpeg,image/png"></label><div id="shopLogoPreview" class="logo-preview"></div>
+ <hr><h3>Database Harga Produk</h3><p class="hint">Atur harga dasar dan biaya tambahan. Nilai disimpan di perangkat ini dan dipakai saat tombol Hitung Harga ditekan.</p>
+ <div class="form-grid compact">
+  <label>Kaos DTF (Rp/pcs)<input id="priceKaosDtf" type="number" min="0" value="80000"></label>
+  <label>Jersey Dryfit – atasan (Rp/pcs)<input id="priceJerseyTop" type="number" min="0" value="100000"></label>
+  <label>Jersey Dryfit – atasan + celana (Rp/pcs)<input id="priceJerseySet" type="number" min="0" value="140000"></label>
+  <label>Kaos Polo Lacost – DTF (Rp/pcs)<input id="pricePoloDtf" type="number" min="0" value="100000"></label>
+  <label>Kaos Polo Lacost – bordir (Rp/pcs)<input id="pricePoloBordir" type="number" min="0" value="120000"></label>
+  <label>Tambahan bahan Emboss / Jaquard (Rp/pcs)<input id="priceEmboss" type="number" min="0" value="10000"></label>
+  <label>Tambahan lengan panjang (Rp/pcs)<input id="priceLongSleeve" type="number" min="0" value="10000"></label>
+  <label>Tambahan kerah Polo (Rp/pcs)<input id="pricePoloCollar" type="number" min="0" value="10000"></label>
+  <label>Tambahan ukuran 2XL / 3XL / 4XL / Custom (Rp/pcs)<input id="priceLargeSize" type="number" min="0" value="5000"></label>
+ </div>
+ <hr><h3>Database Bahan Kain</h3><p class="hint">Satu bahan per baris. Tambahkan atau hapus nama bahan sesuai kebutuhan. Pilihan ini akan muncul di spesifikasi umum dan Custom peserta.</p><label>Daftar bahan kain<textarea id="materialOptions" rows="7" placeholder="Dryfit\nDryfit Emboss\nDryfit Jaquard"></textarea></label>
+ <button class="primary">Simpan Pengaturan & Database Harga</button></form></section>
+</main>
+<div id="toast" class="toast" role="status"></div>
+<script src="app.js?v=16"></script>
+</body></html>
