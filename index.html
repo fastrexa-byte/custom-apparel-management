@@ -61,15 +61,31 @@
     </div>
   </section>
 
-  <section class="card" id="backupDatabase">
-    
+  
+<section class="card" id="backupDatabase">
   <h3>Backup & Restore Database</h3>
-  <p>Simpan salinan seluruh data pesanan agar aman.</p>
+  <p>Simpan dan pulihkan seluruh data pesanan.</p>
 
   <button type="button" onclick="backupDatabase()">
     Backup Database
   </button>
+
+  <hr>
+
+  <h3>Restore Database</h3>
+  <p>Pilih file backup berformat JSON dari HP atau komputer.</p>
+
+  <input
+    type="file"
+    id="fileBackup"
+    accept=".json,application/json"
+  >
+
+  <button type="button" onclick="mulaiRestoreDatabase()">
+    Restore Database
+  </button>
 </section>
+
   
 </section>
 
