@@ -181,9 +181,8 @@ function tampilkanInfoBackup() {
 document.addEventListener("DOMContentLoaded", tampilkanInfoBackup);
 
 
-async function restoreDatabase(file) {
-  let db;
 
+async function restoreDatabase(file) {
   try {
     const isiFile = await file.text();
     const backup = JSON.parse(isiFile);
@@ -196,82 +195,39 @@ async function restoreDatabase(file) {
       return;
     }
 
-    const pesananLama = await ambilSemuaPesanan();
-
-    // Membuat pembanding isi pesanan tanpa ID dan tanggal simpan.
-    function buatKunci(item) {
-      const data = { ...item };
-      delete data.id;
-      delete data.tanggalSimpan;
-
-      return JSON.stringify(data);
-    }
-
-    const kunciTerpakai = new Set(
-      pesananLama.map(item => buatKunci(item))
-    );
-
-    const idTerpakai = new Set(
-      pesananLama.map(item => item.id)
-    );
-
-    let jumlahDitambahkan = 0;
-    let jumlahDilewati = 0;
-
-    db = await bukaDatabase();
+    const db = await bukaDatabase();
 
     await new Promise((resolve, reject) => {
-      const transaksi = db.transaction(
-        STORE_NAME,
-        "readwrite"
-      );
-
+      const transaksi = db.transaction(STORE_NAME, "readwrite");
       const store = transaksi.objectStore(STORE_NAME);
 
-      backup.dataPesanan.forEach(item => {
-        if (!item || typeof item !== "object") {
-          jumlahDilewati++;
-          return;
-        }
+      // Hapus seluruh data lama
+      const hapus = store.clear();
 
-        const data = { ...item };
-        const kunci = buatKunci(data);
-
-        // Lewati pesanan yang isinya sudah ada.
-        if (kunciTerpakai.has(kunci)) {
-          jumlahDilewati++;
-          return;
-        }
-
-        // Jika ID sudah digunakan, buat ID baru.
-        if (data.id == null || idTerpakai.has(data.id)) {
-          delete data.id;
-        } else {
-          idTerpakai.add(data.id);
-        }
-
-        store.add(data);
-
-        kunciTerpakai.add(kunci);
-        jumlahDitambahkan++;
-      });
+      hapus.onsuccess = () => {
+        backup.dataPesanan.forEach(item => {
+          store.put({ ...item });
+        });
+      };
 
       transaksi.oncomplete = resolve;
       transaksi.onerror = () => reject(transaksi.error);
       transaksi.onabort = () => reject(transaksi.error);
     });
 
+    db.close();
+
     alert(
-      "Restore selesai!\n\n" +
-      "Pesanan baru: " + jumlahDitambahkan + "\n" +
-      "Pesanan dilewati: " + jumlahDilewati
+      "Restore berhasil! Database sekarang berisi " +
+      backup.dataPesanan.length +
+      " pesanan."
     );
+
+    await tampilkanRiwayat();
 
   } catch (error) {
     console.error(error);
     alert("Restore gagal. Pastikan file backup benar.");
-  } finally {
-    if (db) db.close();
   }
 }
 
