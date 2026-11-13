@@ -180,6 +180,7 @@ function tampilkanInfoBackup() {
 
 document.addEventListener("DOMContentLoaded", tampilkanInfoBackup);
 
+
 async function restoreDatabase(file) {
   let db;
 
@@ -197,19 +198,52 @@ async function restoreDatabase(file) {
 
     const pesananLama = await ambilSemuaPesanan();
 
+    // Membuat pembanding isi pesanan tanpa ID dan tanggal simpan.
+    function buatKunci(item) {
+      const data = { ...item };
+      delete data.id;
+      delete data.tanggalSimpan;
+
+      return JSON.stringify(data);
+    }
+
+    const kunciTerpakai = new Set(
+      pesananLama.map(item => buatKunci(item))
+    );
+
     const idTerpakai = new Set(
       pesananLama.map(item => item.id)
     );
 
+    let jumlahDitambahkan = 0;
+    let jumlahDilewati = 0;
+
     db = await bukaDatabase();
 
     await new Promise((resolve, reject) => {
-      const transaksi = db.transaction(STORE_NAME, "readwrite");
+      const transaksi = db.transaction(
+        STORE_NAME,
+        "readwrite"
+      );
+
       const store = transaksi.objectStore(STORE_NAME);
 
       backup.dataPesanan.forEach(item => {
-        const data = { ...item };
+        if (!item || typeof item !== "object") {
+          jumlahDilewati++;
+          return;
+        }
 
+        const data = { ...item };
+        const kunci = buatKunci(data);
+
+        // Lewati pesanan yang isinya sudah ada.
+        if (kunciTerpakai.has(kunci)) {
+          jumlahDilewati++;
+          return;
+        }
+
+        // Jika ID sudah digunakan, buat ID baru.
         if (data.id == null || idTerpakai.has(data.id)) {
           delete data.id;
         } else {
@@ -217,6 +251,9 @@ async function restoreDatabase(file) {
         }
 
         store.add(data);
+
+        kunciTerpakai.add(kunci);
+        jumlahDitambahkan++;
       });
 
       transaksi.oncomplete = resolve;
@@ -225,9 +262,9 @@ async function restoreDatabase(file) {
     });
 
     alert(
-      "Restore berhasil! " +
-      backup.dataPesanan.length +
-      " data pesanan berhasil diproses."
+      "Restore selesai!\n\n" +
+      "Pesanan baru: " + jumlahDitambahkan + "\n" +
+      "Pesanan dilewati: " + jumlahDilewati
     );
 
   } catch (error) {
